@@ -16,4 +16,9 @@ HERE = Path(__file__).resolve().parent
 OUT = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
 
 OUT.mkdir(parents=True, exist_ok=True)
-shutil.copyfile(HERE / "entry.png", OUT / "entry.png")
+source = HERE / "entry.png"
+target = OUT / "entry.png"
+shutil.copyfile(source, target)
+# Fail loudly rather than hand the grader a truncated copy.
+if target.stat().st_size != source.stat().st_size:
+    raise SystemExit("entry.png copy incomplete: sizes differ")
